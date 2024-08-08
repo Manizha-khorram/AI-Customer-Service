@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@nanostores/react": "github:ai/react",
+    "cohere-ai": "^7.11.2"
+  }
+}
