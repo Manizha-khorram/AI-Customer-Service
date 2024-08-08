@@ -62,7 +62,7 @@ export default function Chat() {
                                     <div className = 'mb-6 flexgap-3'>
                                         <Avatar>
                                             <AvatarImage src =''></AvatarImage>
-                                            <AvatarFallback className = 'bg-emerald-500 text-white'>
+                                            <AvatarFallback className = 'bg-purple-500 text-white'>
                                                 AI
                                             </AvatarFallback>
                                         </Avatar>
@@ -96,7 +96,7 @@ export default function Chat() {
                             disabled={isLoading}
                             className='absolute right-1 top-1 h-8 w-10'
                         >
-                        <SendHorizontalIcon className='h-5 w-5 text-emerald-500'></SendHorizontalIcon>
+                        <SendHorizontalIcon className='h-5 w-5 text-purple-500'></SendHorizontalIcon>
                         </Button>
                     </form>
                 </div>
