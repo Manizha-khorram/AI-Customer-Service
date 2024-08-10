@@ -22,7 +22,7 @@ export const useSignup = () => {
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false);
+      throw new Error("Failed to sign up");
     }
   };
 
