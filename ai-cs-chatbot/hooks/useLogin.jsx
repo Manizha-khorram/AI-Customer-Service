@@ -20,7 +20,7 @@ export const useLogin = () => {
       dispatch({ type: "LOGIN", payload: res.user });
       setUser(res.user);
     } catch (err) {
-      setError(err.message);
+      throw new Error("Failed to sign in");
     } finally {
       setLoading(false);
     }

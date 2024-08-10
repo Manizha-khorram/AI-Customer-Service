@@ -99,7 +99,7 @@ export default function LandingPage() {
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h5" color="#1976d2">
               {isSignIn ? "Sign in" : "Sign up"}
             </Typography>
             <Box
@@ -122,6 +122,16 @@ export default function LandingPage() {
                 InputLabelProps={{
                   style: { color: "#1976d2" },
                 }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#1976d2",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#1976d2",
+                    },
+                  },
+                }}
               />
               <TextField
                 margin="normal"
@@ -136,6 +146,16 @@ export default function LandingPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 InputLabelProps={{
                   style: { color: "#1976d2" },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#1976d2",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#1976d2",
+                    },
+                  },
                 }}
               />
               <FormControlLabel
