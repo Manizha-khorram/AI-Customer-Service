@@ -1,6 +1,6 @@
 "use client";
-import { useChat } from "ai/react";
-import { useEffect, useRef } from "react";
+import { useChat, Message } from "ai/react";
+import { useState, useEffect, useRef } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,9 +10,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SendHorizontalIcon } from "lucide-react";
 import CopyToClipboard from "@/components/copy-to-clipboard";
 
-export default function Chat() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
+
+  export default function Chat() {
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, setMessages } =
     useChat({
       initialMessages: [
         {
@@ -23,20 +23,49 @@ export default function Chat() {
       ],
     });
 
+  const ref = useRef<HTMLDivElement>(null);
+
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+
   useEffect(() => {
+    if (messages.length === 1 && messages[0].role === "system") {
+      const defaultMessage: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: "Hi, I'm ChatBot! How can I help you today?"
+      };
+      setMessages([...messages, defaultMessage]);
+    }
+
     if (ref.current === null) return;
     ref.current.scrollTo(0, ref.current.scrollHeight);
-    // ref.current.scrollTop = ref.current.scrollHeight
-  }, [messages]);
+  }, [messages, setMessages]);
+
+  const changeTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   return (
-    <section className="text-zinc-700">
-      <div className="container flex h-screen flex-col items-center justify-center">
+    <section className={`${isDarkMode ? "dark-mode" : ""}`}>
+      <div className="container flex h-screen flex-col items-center justify-center" style={{
+        border: '6px solid purple',
+        backgroundColor: 'var(--background)',
+        color: 'var(--text)'
+      }}>
+        <Avatar>
+          <AvatarImage src="/images/robot.jpg"></AvatarImage>
+          <AvatarFallback className="bg-purple-500 text-white">AI</AvatarFallback>
+        </Avatar>
         <h1 className="font-serif text-2x1 font-medium">AI Chatbot</h1>
-        <div className="mt-4 w-full max-w-lg">
+        <Button onClick={changeTheme} className="mb-4">
+            Switch to {isDarkMode ? "Light" : "Dark"} Mode
+        </Button>
+        <div className="mt-6 w-full max-w-lg">
+          
           {/* {response container} */}
           <ScrollArea
-            className="mb-2 h-[400px] rounded-md border p-4"
+            className="mb-2 h-[400px] p-4 border-4 border-purple-500 rounded-md"
             ref={ref}
           >
             {error && (
@@ -45,13 +74,9 @@ export default function Chat() {
             {messages.map((m) => (
               <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">
                 {m.role === "user" && (
-                  <div className="mb-6 flex gap-3">
-                    <Avatar>
-                      <AvatarImage src="" />
-                      <AvatarFallback className="text-sm">U</AvatarFallback>
-                    </Avatar>
-                    <div className="mt-1.5">
-                      <p className="front-semibold">You</p>
+                  <div className="mb-6 flex gap-3 justify-end">
+                    <div className="mt-1.5 w-full text-right">
+                      <p className="front-semibold text-purple-500">You</p>
                       <div className="mt-1.5 text-sm">{m.content}</div>
                     </div>
                   </div>
@@ -59,7 +84,7 @@ export default function Chat() {
                 {m.role === "assistant" && (
                   <div className="mb-6 flexgap-3">
                     <Avatar>
-                      <AvatarImage src=""></AvatarImage>
+                      <AvatarImage src="/images/robot.jpg"></AvatarImage>
                       <AvatarFallback className="bg-purple-500 text-white">
                         AI
                       </AvatarFallback>
