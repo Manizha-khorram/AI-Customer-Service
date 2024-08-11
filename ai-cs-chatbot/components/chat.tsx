@@ -45,22 +45,33 @@ import CopyToClipboard from "@/components/copy-to-clipboard";
   const changeTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
+  const logout = () => {
+    window.location.href = "/";
+  };
 
   return (
     <section className={`${isDarkMode ? "dark-mode" : ""}`}>
       <div className="container flex h-screen flex-col items-center justify-center" style={{
-        border: '6px solid purple',
+        border: '',
         backgroundColor: 'var(--background)',
         color: 'var(--text)'
       }}>
+        <div>
+        <Button onClick={changeTheme} className="mb-4 justify-right">
+            Switch to {isDarkMode ? "Light" : "Dark"} Mode
+        </Button>
+        <Button onClick={logout} className="justify-right m-3">
+          Logout
+        </Button>
+        </div>
+        
         <Avatar>
           <AvatarImage src="/images/robot.jpg"></AvatarImage>
           <AvatarFallback className="bg-purple-500 text-white">AI</AvatarFallback>
         </Avatar>
+        <br></br>
         <h1 className="font-serif text-2x1 font-medium">AI Chatbot</h1>
-        <Button onClick={changeTheme} className="mb-4">
-            Switch to {isDarkMode ? "Light" : "Dark"} Mode
-        </Button>
+        
         <div className="mt-6 w-full max-w-lg">
           
           {/* {response container} */}
