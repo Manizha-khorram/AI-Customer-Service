@@ -10,8 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SendHorizontalIcon } from "lucide-react";
 import CopyToClipboard from "@/components/copy-to-clipboard";
 
-
-  export default function Chat() {
+export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit, isLoading, error, setMessages } =
     useChat({
       initialMessages: [
@@ -26,7 +25,6 @@ import CopyToClipboard from "@/components/copy-to-clipboard";
   const ref = useRef<HTMLDivElement>(null);
 
   const [isDarkMode, setIsDarkMode] = useState(false);
-
 
   useEffect(() => {
     if (messages.length === 1 && messages[0].role === "system") {
@@ -50,93 +48,73 @@ import CopyToClipboard from "@/components/copy-to-clipboard";
   };
 
   return (
-    <section className={`${isDarkMode ? "dark-mode" : ""}`}>
-      <div className="container flex h-screen flex-col items-center justify-center" style={{
-        border: '',
-        backgroundColor: 'var(--background)',
-        color: 'var(--text)'
-      }}>
-        <div>
-        <Button onClick={changeTheme} className="mb-4 justify-right">
-            Switch to {isDarkMode ? "Light" : "Dark"} Mode
-        </Button>
-        <Button onClick={logout} className="justify-right m-3">
-          Logout
-        </Button>
-        </div>
-        
-        <Avatar>
-          <AvatarImage src="/images/robot.jpg"></AvatarImage>
-          <AvatarFallback className="bg-purple-500 text-white">AI</AvatarFallback>
-        </Avatar>
-        <br></br>
-        <h1 className="font-serif text-2x1 font-medium">AI Chatbot</h1>
-        
-        <div className="mt-6 w-full max-w-lg">
-          
-          {/* {response container} */}
-          <ScrollArea
-            className="mb-2 h-[400px] p-4 border-4 border-purple-500 rounded-md"
-            ref={ref}
-          >
-            {error && (
-              <div className="text-sm text-red-400"> {error.message}</div>
-            )}
-            {messages.map((m) => (
-              <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">
-                {m.role === "user" && (
-                  <div className="mb-6 flex gap-3 justify-end">
-                    <div className="mt-1.5 w-full text-right">
-                      <p className="front-semibold text-purple-500">You</p>
-                      <div className="mt-1.5 text-sm">{m.content}</div>
-                    </div>
-                  </div>
-                )}
-                {m.role === "assistant" && (
-                  <div className="mb-6 flexgap-3">
-                    <Avatar>
-                      <AvatarImage src="/images/robot.jpg"></AvatarImage>
-                      <AvatarFallback className="bg-purple-500 text-white">
-                        AI
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="mt-1.5 w-full">
-                      <div className="flex justify-between">
-                        <p className="font-semibold">BOT</p>
-                        <CopyToClipboard
-                          message={m}
-                          className="mt-1"
-                        ></CopyToClipboard>
-                      </div>
-                      <div className="m-2 text-sm text-zinc-500">
-                        {m.content}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </ScrollArea>
-
-          {/* {input form } */}
-          <form onSubmit={handleSubmit} className="relative">
-            <Input
-              value={input}
-              onChange={handleInputChange}
-              placeholder="Ask me anything..."
-              className="pr-12 placeholder:italic placeholder:text-zinc-600"
-            ></Input>
-            <Button
-              size="icon"
-              type="submit"
-              variant="secondary"
-              disabled={isLoading}
-              className="absolute right-1 top-1 h-8 w-10"
-            >
-              <SendHorizontalIcon className="h-5 w-5 text-purple-500"></SendHorizontalIcon>
+    <section className={`min-h-screen ${isDarkMode ? "dark" : ""}`}>
+      <div className="container mx-auto px-4 py-8 flex flex-col h-screen  dark:bg-gray-900 dark:text-white">
+        <header className="flex justify-between items-center mb-6">
+          <div className="flex items-center space-x-4">
+            <Avatar className="h-12 w-12">
+              <AvatarImage src="/images/robot.jpg" alt="AI Chatbot" />
+              <AvatarFallback className="bg-purple-500 text-white">AI</AvatarFallback>
+            </Avatar>
+            <h1 className="text-2xl font-bold">AI Chatbot</h1>
+          </div>
+          <div className="flex space-x-2">
+            <Button onClick={changeTheme} variant="outline">
+              {isDarkMode ? "Light" : "Dark"} Mode
             </Button>
-          </form>
-        </div>
+            <Button onClick={logout} variant="ghost">
+              Logout
+            </Button>
+          </div>
+        </header>
+        
+        <ScrollArea className="flex-grow mb-6 border rounded-lg shadow-inner bg-white dark:bg-gray-800" ref={ref}>
+          {error && (
+            <div className="p-4 text-sm text-red-500 bg-red-100 dark:bg-red-900 rounded-lg mb-4">{error.message}</div>
+          )}
+          <div className="p-4 space-y-6">
+            {messages.map((m) => (
+              m.role !== "system" && (
+                <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div className={`max-w-[80%] ${m.role === "user" ? "bg-purple-100 dark:bg-purple-900" : "bg-gray-100 dark:bg-gray-700"} rounded-lg p-3 shadow`}>
+                    {m.role === "assistant" && (
+                      <div className="flex items-center mb-2">
+                        <Avatar className="h-6 w-6 mr-2">
+                          <AvatarImage src="/images/robot.jpg" alt="AI" />
+                          <AvatarFallback className="bg-purple-500 text-white text-xs">AI</AvatarFallback>
+                        </Avatar>
+                        <p className="font-semibold text-sm">BOT</p>
+                      </div>
+                    )}
+                    <div className="text-sm">{m.content}</div>
+                    {m.role === "assistant" && (
+                      <div className={'mt-2 flex justify-end ${isDarkMode ? "dark" : ""}'}>
+                        <CopyToClipboard message={m} className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )
+            ))}
+          </div>
+        </ScrollArea>
+
+        <form onSubmit={handleSubmit} className="relative">
+          <Input
+            value={input}
+            onChange={handleInputChange}
+            placeholder="Ask me anything..."
+            className="pr-12 rounded-full bg-white dark:bg-gray-700 dark:text-white shadow-lg"
+          />
+          <Button
+            size="icon"
+            type="submit"
+            disabled={isLoading}
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 rounded-full h-10 w-10 bg-purple-500 hover:bg-purple-600 text-white"
+          >
+            <SendHorizontalIcon className="h-5 w-5" />
+          </Button>
+        </form>
       </div>
     </section>
   );
